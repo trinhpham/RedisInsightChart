@@ -15,12 +15,19 @@ jobs:
           name: "Checkout latest tag"
           command: "./.circleci/buildscripts/getLatestTag.sh"
       - run:
-          name: "Build Docker images"
-          command: "./.circleci/buildscripts/buildDockerImage.sh"
+          name: "Build & Push Docker images"
+          command: |
+            echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            "./.circleci/buildscripts/buildDockerImage.sh"
+      - run:
+          name: "Build Helm chart"
+          command: echo TBD
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  build-docker:
     jobs:
-      - say-hello
+      - build-docker-and-helm:
+          build:
+            context: DockerHub

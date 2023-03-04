@@ -6,6 +6,7 @@
 cd "$(dirname "$0")/../../RedisInsight"
 
 DOCKER_TAGS_ARG=""
+tags=""
 
 parse_tags_to_docker_arg() {
   # Set comma as the new delimiter for the scope of this function.
@@ -18,9 +19,9 @@ parse_tags_to_docker_arg() {
 
   for tag in "${tags[@]}"; do
     if [ -z "$docker_arg" ]; then
-      docker_arg="--tag=\"$PARAM_REGISTRY/$PARAM_IMAGE:$tag\""
+      docker_arg="--tag=\"$DOCKER_IMAGE_NAME:$tag\""
     else
-      docker_arg="$docker_arg --tag=\"$PARAM_REGISTRY/$PARAM_IMAGE:$tag\""
+      docker_arg="$docker_arg --tag=\"$DOCKER_IMAGE_NAME:$tag\""
     fi
   done
 
@@ -34,5 +35,9 @@ if parse_tags_to_docker_arg ; then
     "$DOCKER_TAGS_ARG"
     "--progress=plain"
     )
-    docker build ${build_args[*]}
+    docker build ${build_args[*]} .
+
+    for tag in "${tags[@]}"; do
+        docker push "$DOCKER_IMAGE_NAME:$tag"
+    done
 fi
