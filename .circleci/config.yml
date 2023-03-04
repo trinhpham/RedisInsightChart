@@ -29,5 +29,4 @@ workflows:
   build-docker:
     jobs:
       - build-docker-and-helm:
-          build:
-            context: DockerHub
+          context: DockerHub
