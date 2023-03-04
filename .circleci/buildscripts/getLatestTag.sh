@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# set -xe
+set -xe
 
 # Move to RedisInsight folder
 cd "$(dirname "$0")/../../RedisInsight"
